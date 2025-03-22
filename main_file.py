@@ -29,13 +29,13 @@ class GameSprite(sprite.Sprite):
 class Player(GameSprite):
     def update(self):
         keys = key.get_pressed()
-        if keys[K_a] and self.rect.x > 5:
+        if keys[K_a] and self.rect.x > 5 or keys[K_LEFT] and self.rect.x > 5:
             self.rect.x -= self.speed
-        if keys[K_d] and self.rect.x < win_width - 80:
+        if keys[K_d] and self.rect.x < win_width - 80 or keys[K_RIGHT] and self.rect.x < win_width - 80:
             self.rect.x += self.speed
-        if keys[K_w] and self.rect.y > 5:
+        if keys[K_w] and self.rect.y > 5 or keys[K_UP] and self.rect.y > 5:
             self.rect.y -= self.speed
-        if keys[K_s] and self.rect.y < win_height - 80:
+        if keys[K_s] and self.rect.y < win_height - 80 or keys[K_DOWN] and self.rect.y < win_height - 80:
             self.rect.y += self.speed
             
 
@@ -50,8 +50,44 @@ class Enemy(GameSprite):
             self.rect.x += self.speed
         if self.direction== "left":
             self.rect.x -= self.speed
-hero1 = Player("enemy.png", 100, 100, 10)
-hero2 = Enemy("chest.png", 200, 200, 5)
+
+
+class Wall(sprite.Sprite):
+    def __init__(self, color_1, color_2, color_3, wall_x, wall_y, wall_width, wall_height):
+        super().__init__()
+        self.color_1 = color_1
+        self.color_2 = color_2
+        self.color_3 = color_3
+        self.width = wall_width
+        self.height = wall_height
+        self.image = Surface((self.width, self.height))
+        self.image.fill((color_1, color_2, color_3))        
+        self.rect = self.image.get_rect()
+        self.rect.x = wall_x
+        self.rect.y = wall_y
+    def draw_wall(self):
+        window.blit(self.image, (self.rect.x,self.rect.y))
+
+hero1 = Player("enemy.png", 100, 100, 5)
+hero2 = Enemy("chest.png", 530, 200, 0)
+enemy = Enemy("enem.png", 470, 150, 3)
+wall1 = Wall(205,255,55,300,70,3,350)
+wall2 = Wall(205,255,55,300,70,350,3)
+wall3 = Wall(205,255,55,650,70,3,300)
+wall4 = Wall(205,255,55,500,170,3,300)
+
+wall5 = Wall(205,255,55,400,170,100,3)
+wall6 = Wall(205,255,55,150,100,300,3)
+wall7 = Wall(205,255,55,250,200,3,300)
+wall8 = Wall(205,255,55,450,500,300,3)
+
+
+
+
+sprite.collide_rect(hero1, hero2)
+sprite.collide_rect(hero1, enemy)
+sprite.collide_rect(hero1, wall1)
+
 while game:
     for e in event.get():
         if e.type == QUIT:
@@ -62,7 +98,16 @@ while game:
         hero2.update()     
         hero1.reset()
         hero2.reset()
+        enemy.update()     
+        enemy.reset()
+        wall1.draw_wall()
+        wall2.draw_wall()
+        wall3.draw_wall()
+        wall4.draw_wall()
+        wall5.draw_wall()
+        wall6.draw_wall()
+        wall7.draw_wall()
 
-        
+
     display.update()
     clock.tick(fps)
