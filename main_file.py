@@ -12,7 +12,14 @@ mixer.music.play()
 game = True
 clock = time.Clock()
 fps = 60
-
+font.init()
+font = font.Font(None, 70)
+win = font.render(
+    'YOU WIN!', True, (155, 215, 200)
+)
+lose = font.render(
+    'YOU LOSE!', True, (255, 0, 0)
+)
 finish = False
 
 class GameSprite(sprite.Sprite):
@@ -68,25 +75,24 @@ class Wall(sprite.Sprite):
     def draw_wall(self):
         window.blit(self.image, (self.rect.x,self.rect.y))
 
-hero1 = Player("enemy.png", 100, 100, 5)
+hero1 = Player("enemy.png", 0, 0, 3)
 hero2 = Enemy("chest.png", 530, 200, 0)
-enemy = Enemy("enem.png", 470, 150, 3)
+enemy = Enemy("enem.png", 470, 150, 2)
 wall1 = Wall(205,255,55,300,70,3,350)
-wall2 = Wall(205,255,55,300,70,350,3)
-wall3 = Wall(205,255,55,650,70,3,300)
-wall4 = Wall(205,255,55,500,170,3,300)
+wall2 = Wall(205,255,55,150,70,500,3)
+wall3 = Wall(205,255,55,650,70,3,500)
+wall4 = Wall(205,255,55,500,170,3,450)
 
-wall5 = Wall(205,255,55,400,170,100,3)
-wall6 = Wall(205,255,55,150,100,300,3)
-wall7 = Wall(205,255,55,250,200,3,300)
-wall8 = Wall(205,255,55,450,500,300,3)
+wall5 = Wall(205,255,55,225,370,3,300)
+wall6 = Wall(205,255,55,150,370,75,3)
+wall7 = Wall(205,255,55,50,70,3,300)
+wall8 = Wall(205,255,55,150,0,3,300)
+wall9 = Wall(205,255,55,50,370,100,3)
 
 
 
 
-sprite.collide_rect(hero1, hero2)
-sprite.collide_rect(hero1, enemy)
-sprite.collide_rect(hero1, wall1)
+
 
 while game:
     for e in event.get():
@@ -106,7 +112,17 @@ while game:
         wall4.draw_wall()
         wall5.draw_wall()
         wall6.draw_wall()
+        wall9.draw_wall()
+        wall8.draw_wall()
         wall7.draw_wall()
+        
+        if sprite.collide_rect(hero1, enemy) or sprite.collide_rect(hero1, wall1) or sprite.collide_rect(hero1, wall2)or sprite.collide_rect(hero1, wall3) or sprite.collide_rect(hero1, wall4) or sprite.collide_rect(hero1, wall5) or sprite.collide_rect(hero1, wall6) or sprite.collide_rect(hero1, wall7) or sprite.collide_rect(hero1, wall8) or sprite.collide_rect(hero1, wall9):
+            finish = True
+            window.blit(lose, (200, 200))
+        if sprite.collide_rect(hero1, hero2):
+            finish = True
+            window.blit(win, (200, 200))
+            
 
 
     display.update()
